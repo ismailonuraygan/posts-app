@@ -12,6 +12,11 @@
     background-color: var(--background-color);
 }
 
+.header.--scrolling-down {
+    background: var(--background-color);
+	backdrop-filter: blur(15px);
+}
+
 .backButton {
     background: none;
     border: none;

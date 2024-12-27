@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 
 import styles from './styles.module.css'
 import { useThemeContext } from '@/providers/ThemeProvider'
+import clsx from 'clsx'
 
 export default function Header() {
 	const router = useRouter()
@@ -20,15 +21,6 @@ export default function Header() {
 
 	const { mode, toggleTheme } = useThemeContext()
 
-	useEffect(() => {
-		setCanGoBack(window.history.length > 1)
-	}, [pathname])
-
-	useEffect(() => {
-		const accessToken = localStorage.getItem('accessToken')
-		setIsLoggedIn(!!accessToken)
-	}, [pathname])
-
 	const handleBack = () => {
 		router.back()
 	}
@@ -37,8 +29,38 @@ export default function Header() {
 
 	const isLoginPage = pathname === '/login'
 
+	const [scrollingDown, setScrollingDown] = useState(false)
+
+	let lastScrollTop = 0
+
+	useEffect(() => {
+		const handleScroll = () => {
+			let st = window.scrollY || document.documentElement.scrollTop
+
+			if (st > lastScrollTop) {
+				setScrollingDown(true)
+			} else if (st === 0) {
+				setScrollingDown(false)
+			}
+
+			lastScrollTop = st <= 0 ? 0 : st
+		}
+
+		window.addEventListener('scroll', handleScroll)
+
+		return () => window.removeEventListener('scroll', handleScroll)
+	}, [])
+
+	useEffect(() => {
+		setCanGoBack(window.history.length > 1)
+
+		const accessToken = localStorage.getItem('accessToken')
+
+		setIsLoggedIn(!!accessToken)
+	}, [pathname])
+
 	return (
-		<header className={styles.header}>
+		<header className={clsx(styles['header'], { [styles['--scrolling-down']]: scrollingDown })}>
 			{
 				isPostsPage && (
 					<button onClick={handleBack} className={styles.backButton}>
