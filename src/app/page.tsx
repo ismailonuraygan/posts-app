@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import styles from './page.module.css'
 import { PageHeader } from './components/PageHeader'
+import FeatureCard from './components/FeatureCard'
 
 export default function Home() {
 	return (
@@ -13,23 +14,11 @@ export default function Home() {
 			<PageHeader title="Posts App" supportingText="A modern platform for sharing your thoughts and connecting with others." hasBorderBottom={true} />
 
 				<div className={styles.features}>
-					<div className={styles.feature}>
-						<h3>Create Posts</h3>
+					<FeatureCard title="Create Posts" supportingText="Share your thoughts, ideas, and stories with the world." />
 
-						<p>Share your thoughts, ideas, and stories with the world.</p>
-					</div>
+					<FeatureCard title="Interact" supportingText="Engage with other users through comments and discussions." />
 
-					<div className={styles.feature}>
-						<h3>Interact</h3>
-
-						<p>Engage with other users through comments and discussions.</p>
-					</div>
-
-					<div className={styles.feature}>
-						<h3>Discover</h3>
-
-						<p>Explore a wide range of posts from different users.</p>
-					</div>
+					<FeatureCard title="Discover" supportingText="Explore a wide range of posts from different users." />
 				</div>
 
 				<div className={styles.ctas}>
