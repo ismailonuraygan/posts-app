@@ -9,29 +9,30 @@ export default function Home() {
 	return (
 		<div className='main'>
 
-		<div className='container'>
-			<div className='section'>
-			<PageHeader title="Posts App" supportingText="A modern platform for sharing your thoughts and connecting with others." hasBorderBottom={true} />
+			<div className='container'>
+				<div className='section'>
 
-				<div className={styles.features}>
-					<FeatureCard title="Create Posts" supportingText="Share your thoughts, ideas, and stories with the world." />
+					<PageHeader title="Posts App" supportingText="A modern platform for sharing your thoughts and connecting with others." hasBorderBottom={true} />
 
-					<FeatureCard title="Interact" supportingText="Engage with other users through comments and discussions." />
+					<div className={styles.features}>
+						<FeatureCard title="Create Posts" supportingText="Share your thoughts, ideas, and stories with the world." />
 
-					<FeatureCard title="Discover" supportingText="Explore a wide range of posts from different users." />
-				</div>
+						<FeatureCard title="Interact" supportingText="Engage with other users through comments and discussions." />
 
-				<div className={styles.ctas}>
-					<Link href="/login" className={styles.primary}>
-						Get Started
-					</Link>
+						<FeatureCard title="Discover" supportingText="Explore a wide range of posts from different users." />
+					</div>
 
-					<Link href="/posts" className={styles.secondary}>
-						Browse Posts
-					</Link>
+					<div className={styles.ctas}>
+						<Link href="/login" className={styles.primary}>
+							Get Started
+						</Link>
+
+						<Link href="/posts" className={styles.secondary}>
+							Browse Posts
+						</Link>
+					</div>
 				</div>
 			</div>
-		</div>
 		</div>
 	)
 }
