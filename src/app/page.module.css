@@ -6,11 +6,11 @@
   --button-primary-hover: #383838;
   --button-secondary-hover: #f2f2f2;
 
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-items: center;
-  min-height: 100svh;
   padding: 80px;
   gap: 64px;
   font-family: var(--font-geist-sans);
@@ -28,10 +28,16 @@
 }
 
 .main {
+  flex: 1;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
   gap: 32px;
-  grid-row-start: 2;
 }
 
 .main ol {
@@ -56,40 +62,84 @@
   font-weight: 600;
 }
 
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  background: linear-gradient(45deg, #0070f3, #00a6ed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 3rem;
+  max-width: 600px;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  width: 100%;
+  margin-bottom: 3rem;
+}
+
+.feature {
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.2s, border-color 0.2s;
+}
+
+.feature:hover {
+  transform: translateY(-5px);
+  border-color: #0070f3;
+}
+
+.feature h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.feature p {
+  color: #888;
+  line-height: 1.6;
+}
+
 .ctas {
   display: flex;
-  gap: 16px;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
-.ctas a {
-  appearance: none;
-  border-radius: 128px;
-  height: 48px;
-  padding: 0 20px;
-  border: none;
-  border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  line-height: 20px;
+.primary,
+.secondary {
+  padding: 0.8rem 2rem;
+  border-radius: 8px;
   font-weight: 500;
+  transition: transform 0.2s;
+  text-decoration: none;
 }
 
-a.primary {
-  background: var(--foreground);
-  color: var(--background);
-  gap: 8px;
+.primary:hover,
+.secondary:hover {
+  transform: translateY(-2px);
 }
 
-a.secondary {
-  border-color: var(--gray-alpha-200);
-  min-width: 180px;
+.primary {
+  background: #0070f3;
+  color: white;
+}
+
+.secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .footer {
@@ -123,6 +173,20 @@ a.secondary {
   .footer a:hover {
     text-decoration: underline;
     text-underline-offset: 4px;
+  }
+}
+
+@media (max-width: 768px) {
+  .main {
+    padding: 2rem;
+  }
+
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .features {
+    grid-template-columns: 1fr;
   }
 }
 
