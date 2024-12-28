@@ -1,9 +1,10 @@
 'use client'
 
-import { FormControl, InputLabel, Select, MenuItem, Box, TextField, InputAdornment, useMediaQuery, useTheme } from '@mui/material'
+import { FormControl, InputLabel, Select, MenuItem, Box, InputAdornment, useMediaQuery, useTheme } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import { debounce } from 'lodash'
 import { usePostsContext } from '../context/PostsContext'
+import TextField from '@/components/TextField'
 
 export default function PostsHeader() {
 	const theme = useTheme()
@@ -140,29 +141,12 @@ export default function PostsHeader() {
 				placeholder="Search posts..."
 				onChange={handleSearch}
 				fullWidth
-				size="small"
 				InputProps={{
 					startAdornment: (
 						<InputAdornment position="start">
 							<SearchIcon sx={{ color: 'var(--secondary-text)' }} />
 						</InputAdornment>
 					),
-				}}
-				sx={{
-					'& .MuiOutlinedInput-root': {
-						'& fieldset': {
-							borderColor: 'var(--border-color)',
-						},
-						'&:hover fieldset': {
-							borderColor: 'var(--primary-color)',
-						},
-						'&.Mui-focused fieldset': {
-							borderColor: 'var(--primary-color)',
-						},
-					},
-					'& .MuiInputBase-input': {
-						color: 'var(--foreground)',
-					},
 				}}
 			/>
 		</Box>
