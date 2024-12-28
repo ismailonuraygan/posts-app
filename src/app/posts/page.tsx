@@ -13,10 +13,6 @@ export default function PostPage () {
 }
 
 function Posts() {
-	const { posts } = usePostsContext()
-
-	if (!posts.length) return <div>Loading...</div>
-
 	return (
 		<div className='main'>
 			<div className='container'>
