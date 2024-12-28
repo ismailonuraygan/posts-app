@@ -37,6 +37,8 @@ export function PostsProvider({ children }: { children: ReactNode }) {
 	const req = useRequest()
 
 	const fetchPosts = useCallback(async () => {
+		setLoading(true)
+
 		try {
 			const skip = (page - 1) * itemsPerPage
 
@@ -49,9 +51,12 @@ export function PostsProvider({ children }: { children: ReactNode }) {
 			const data = await req.get(endpoint)
 
 			setPosts(data.data.posts)
+
 			setTotalPages(Math.ceil(data.data.total / itemsPerPage))
 		} catch (error) {
 			console.error('Error fetching posts:', error)
+		} finally {
+			setLoading(false)
 		}
 	}, [page, itemsPerPage, searchQuery, sortField, sortOrder])
 

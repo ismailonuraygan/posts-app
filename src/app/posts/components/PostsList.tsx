@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 
 import { usePostsContext } from '../context/PostsContext'
 import styles from '../posts.module.css'
+import PostsListSkeleton from './PostsListSkeleton'
 
 export default function PostsList() {
 	const {
@@ -26,7 +27,23 @@ export default function PostsList() {
 		await deletePost(postId)
 	}
 
-	if (!posts.length) return <div>Loading...</div>
+	if (loading) {
+		return <PostsListSkeleton />
+	}
+
+	if (!posts.length) {
+		return (
+			<Box sx={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				minHeight: 200,
+				color: 'var(--secondary-text)'
+			}}>
+				No posts found
+			</Box>
+		)
+	}
 
 	return (
 		<>
