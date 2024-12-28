@@ -1,11 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, TextField, Button, CircularProgress } from '@mui/material'
+import { Box, CircularProgress } from '@mui/material'
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 
 import { useRequest } from '@/app/api'
+import TextField from '@/components/TextField'
+import Button from '@/components/Button'
 
 export default function CreatePostForm() {
 	const [formData, setFormData] = useState({
@@ -84,28 +86,6 @@ export default function CreatePostForm() {
 				onChange={handleChange}
 				required
 				fullWidth
-				sx={{
-					'& .MuiOutlinedInput-root': {
-						'& fieldset': {
-							borderColor: 'var(--border-color)'
-						},
-						'&:hover fieldset': {
-							borderColor: 'var(--foreground)'
-						},
-						'&.Mui-focused fieldset': {
-							borderColor: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputLabel-root': {
-						color: 'var(--secondary-text)',
-						'&.Mui-focused': {
-							color: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputBase-input': {
-						color: 'var(--foreground)'
-					}
-				}}
 			/>
 
 			<TextField
@@ -117,28 +97,6 @@ export default function CreatePostForm() {
 				multiline
 				rows={6}
 				fullWidth
-				sx={{
-					'& .MuiOutlinedInput-root': {
-						'& fieldset': {
-							borderColor: 'var(--border-color)'
-						},
-						'&:hover fieldset': {
-							borderColor: 'var(--foreground)'
-						},
-						'&.Mui-focused fieldset': {
-							borderColor: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputLabel-root': {
-						color: 'var(--secondary-text)',
-						'&.Mui-focused': {
-							color: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputBase-input': {
-						color: 'var(--foreground)'
-					}
-				}}
 			/>
 
 			<TextField
@@ -148,46 +106,12 @@ export default function CreatePostForm() {
 				onChange={handleChange}
 				placeholder="Enter tags separated by commas"
 				fullWidth
-				sx={{
-					'& .MuiOutlinedInput-root': {
-						'& fieldset': {
-							borderColor: 'var(--border-color)'
-						},
-						'&:hover fieldset': {
-							borderColor: 'var(--foreground)'
-						},
-						'&.Mui-focused fieldset': {
-							borderColor: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputLabel-root': {
-						color: 'var(--secondary-text)',
-						'&.Mui-focused': {
-							color: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputBase-input': {
-						color: 'var(--foreground)'
-					}
-				}}
 			/>
 
 			<Button
 				type="submit"
 				variant="contained"
 				disabled={submitting}
-				sx={{
-					bgcolor: 'var(--foreground)',
-					color: 'var(--background)',
-					'&:hover': {
-						bgcolor: 'var(--foreground)',
-						opacity: 0.9
-					},
-					'&.Mui-disabled': {
-						bgcolor: 'var(--border-color)',
-						color: 'var(--secondary-text)'
-					}
-				}}
 			>
 				{submitting ? <CircularProgress size={24} sx={{ color: 'var(--background)' }} /> : 'Create Post'}
 			</Button>

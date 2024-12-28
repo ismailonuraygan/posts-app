@@ -1,10 +1,13 @@
 'use client'
 
 import { useState } from 'react'
-import { Box, TextField, Button } from '@mui/material'
-import { useRequest } from '@/app/api'
-import { IPost } from '@/types/post'
+import { Box } from '@mui/material'
 import { toast } from 'react-toastify'
+
+import { useRequest } from '@/app/api'
+import TextField from '@/components/TextField'
+import Button from '@/components/Button'
+import { IPost } from '@/types/post'
 
 interface EditPostFormProps {
 	post: IPost
@@ -22,9 +25,11 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 		body: post.body
 	})
 
-	const handleSubmit = async (e: React.FormEvent) => {
-		e.preventDefault()
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+	}
 
+	const handleSubmit = async () => {
 		setLoading(true)
 
 		setError(null)
@@ -48,10 +53,14 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 		}
 	}
 
+	const handleCancel = () => {
+		onCancel()
+	}
+
 	return (
 		<Box
 			component="form"
-			onSubmit={handleSubmit}
+			onSubmit={(e) => e.preventDefault()}
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
@@ -59,65 +68,23 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 			}}
 		>
 			<TextField
+				name="title"
 				label="Title"
 				value={formData.title}
-				onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
+				onChange={handleChange}
 				required
 				fullWidth
-				sx={{
-					'& .MuiOutlinedInput-root': {
-						'& fieldset': {
-							borderColor: 'var(--border-color)'
-						},
-						'&:hover fieldset': {
-							borderColor: 'var(--foreground)'
-						},
-						'&.Mui-focused fieldset': {
-							borderColor: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputLabel-root': {
-						color: 'var(--secondary-text)',
-						'&.Mui-focused': {
-							color: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputBase-input': {
-						color: 'var(--foreground)'
-					}
-				}}
 			/>
 
 			<TextField
+				name="body"
 				label="Content"
 				value={formData.body}
-				onChange={(e) => setFormData(prev => ({ ...prev, body: e.target.value }))}
+				onChange={handleChange}
 				required
-				fullWidth
 				multiline
-				rows={4}
-				sx={{
-					'& .MuiOutlinedInput-root': {
-						'& fieldset': {
-							borderColor: 'var(--border-color)'
-						},
-						'&:hover fieldset': {
-							borderColor: 'var(--foreground)'
-						},
-						'&.Mui-focused fieldset': {
-							borderColor: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputLabel-root': {
-						color: 'var(--secondary-text)',
-						'&.Mui-focused': {
-							color: 'var(--foreground)'
-						}
-					},
-					'& .MuiInputBase-input': {
-						color: 'var(--foreground)'
-					}
-				}}
+				rows={6}
+				fullWidth
 			/>
 
 			{error && (
@@ -133,15 +100,12 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 
 			<Box sx={{ display: 'flex', gap: 2, justifyContent: 'flex-end' }}>
 				<Button
-					type="button"
-					onClick={onCancel}
-					disabled={loading}
+					variant="contained"
+					onClick={handleCancel}
 					sx={{
-						borderColor: 'var(--border-color)',
-						color: 'var(--foreground)',
+						bgcolor: 'var(--border-color)',
 						'&:hover': {
-							borderColor: 'var(--foreground)',
-							bgcolor: 'transparent'
+							bgcolor: 'var(--border-color)',
 						}
 					}}
 				>
@@ -149,17 +113,9 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 				</Button>
 
 				<Button
-					type="submit"
 					variant="contained"
+					onClick={handleSubmit}
 					disabled={loading}
-					sx={{
-						bgcolor: 'var(--foreground)',
-						color: 'var(--background)',
-						'&:hover': {
-							bgcolor: 'var(--foreground)',
-							opacity: 0.9
-						}
-					}}
 				>
 					{loading ? 'Saving...' : 'Save Changes'}
 				</Button>
