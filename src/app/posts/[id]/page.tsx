@@ -60,8 +60,23 @@ export default function Post() {
 			}
 			fetchPost()
 	}, [id])
-	
-	if(!post) return
+
+	if (loading) {
+		return <PostSkeleton />
+	}
+
+	if (error || !post) {
+		return (
+			<NotFound
+				title={error === 'Post not found' ? 'Post Not Found' : 'Error'}
+				message={
+					error === 'Post not found'
+						? 'The post you are looking for does not exist or has been removed.'
+						: 'There was an error loading this post. Please try again later.'
+				}
+			/>
+		)
+	}
 
 	return (
 		<div className='main'>
