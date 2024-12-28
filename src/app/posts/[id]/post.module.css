@@ -1,0 +1,12 @@
+.postPage {
+	padding: 20px;
+}
+
+.postPage h1 {
+	margin-bottom: 20px;
+}
+
+.postPage p {
+	font-size: 16px;
+	line-height: 1.5;
+}
