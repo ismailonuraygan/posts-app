@@ -1,0 +1,25 @@
+.postsPage {
+	padding: 20px;
+}
+
+.postsList {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	list-style: none;
+	padding: 0;
+}
+
+.postsList li {
+	padding: 10px;
+	border: 1px solid #ccc;
+	cursor: pointer;
+	transition: all 0.2s ease-in-out;
+}
+
+.postsList li:hover {
+	background-color: #f0f0f0;
+	color: #0070f3;
+	transform: translateY(-2px);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
