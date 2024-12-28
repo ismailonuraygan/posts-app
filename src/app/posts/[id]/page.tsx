@@ -55,7 +55,7 @@ export default function Post() {
 			} catch (error) {
 				console.error('Error fetching post:', error)
 
-				setError(error)
+				setError('Error loading post')
 			} finally {
 				setLoading(false)
 			}
