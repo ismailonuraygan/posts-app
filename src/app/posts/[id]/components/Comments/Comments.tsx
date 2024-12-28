@@ -5,6 +5,7 @@ import { Box, Typography, Avatar, Divider } from '@mui/material'
 import { useRequest } from '@/app/api'
 import { IComment } from '@/types/comment'
 import CommentsSkeleton from './CommentsSkeleton'
+import AddComment from './AddComment'
 
 interface CommentsProps {
 	postId: number
@@ -16,6 +17,10 @@ export default function Comments({ postId }: CommentsProps) {
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
 
+	const handleCommentAdded = (newComment: IComment) => {
+		setComments([...comments, newComment])
+	}
+
 	useEffect(() => {
 		const fetchComments = async () => {
 			setLoading(true)
@@ -23,9 +28,11 @@ export default function Comments({ postId }: CommentsProps) {
 
 			try {
 				const data = await req.get(`/posts/${postId}/comments`)
+
 				setComments(data.data.comments || [])
 			} catch (error) {
 				console.error('Error fetching comments:', error)
+
 				setError('Error loading comments')
 			} finally {
 				setLoading(false)
@@ -138,6 +145,8 @@ export default function Comments({ postId }: CommentsProps) {
 					)}
 				</Box>
 			))}
+
+			<AddComment postId={postId} onCommentAdded={handleCommentAdded} />
 		</Box>
 	)
 }
