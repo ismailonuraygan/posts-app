@@ -67,12 +67,13 @@ export default function Posts() {
 		debouncedSearch(query)
 	}
 
-	const handlePageChange = (_: any, value: number) => {
+	const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value)
 	}
 
 	const handleItemsPerPageChange = (e: any) => {
 		setItemsPerPage(Number(e.target.value))
+
 		setPage(1)
 	}
 
