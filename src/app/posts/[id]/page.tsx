@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
-import { Box, Avatar, Typography } from '@mui/material'
+import { Box, Avatar, Typography, Divider } from '@mui/material'
 import { useRequest } from '@/app/api'
 import { IPost } from '@/types/post'
 import { IUser } from '@/types/user'
 import PostSkeleton from '../components/PostSkeleton'
 import NotFound from '../components/NotFound'
+import Comments from '../components/Comments'
+import CommentsSkeleton from '../components/CommentsSkeleton'
 
 export default function Post() {
 	const req = useRequest()
@@ -31,38 +33,46 @@ export default function Post() {
 	}
 
 	useEffect(() => {
-			const fetchPost = async () => {
-				setLoading(true)
+		const fetchPost = async () => {
+			setLoading(true)
 
-				setError(null)
+			setError(null)
 
-				try {
-					const data = await req.get(`/posts/${id}`)
+			try {
+				const data = await req.get(`/posts/${id}`)
 
-					if (!data.data) {
-						setError('Post not found')
+				if (!data.data) {
+					setError('Post not found')
 
-						setLoading(false)
-
-						return
-					}
-
-					setPost(data.data)
-
-					await fetchUser(data.data.userId)
-				} catch (error) {
-					console.error('Error fetching post:', error)
-
-					setError('Error loading post')
-				} finally {
 					setLoading(false)
+
+					return
 				}
+
+				setPost(data.data)
+
+				await fetchUser(data.data.userId)
+			} catch (error) {
+				console.error('Error fetching post:', error)
+
+				setError(error)
+			} finally {
+				setLoading(false)
 			}
-			fetchPost()
+		}
+		fetchPost()
 	}, [id])
 
 	if (loading) {
-		return <PostSkeleton />
+		return (
+			<div className='main'>
+				<div className='container'>
+					<PostSkeleton />
+
+					<CommentsSkeleton />
+				</div>
+			</div>
+		)
 	}
 
 	if (error || !post) {
@@ -129,6 +139,10 @@ export default function Post() {
 							{post.views} views
 						</Typography>
 					</Box>
+
+					<Divider sx={{ borderColor: 'var(--border-color)' }} />
+
+					<Comments postId={post.id} />
 				</Box>
 			</div>
 		</div>
