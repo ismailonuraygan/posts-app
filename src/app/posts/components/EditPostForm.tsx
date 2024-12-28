@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Box, TextField, Button } from '@mui/material'
 import { useRequest } from '@/app/api'
 import { IPost } from '@/types/post'
+import { toast } from 'react-toastify'
 
 interface EditPostFormProps {
 	post: IPost
@@ -34,8 +35,13 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 			onSave(data)
 
 			await onUpdate()
+
+			toast.success('Post updated successfully!')
 		} catch (error) {
 			console.error('Error updating post:', error)
+
+			toast.error('Failed to update post. Please try again.')
+
 			setError('Failed to update post. Please try again.')
 		} finally {
 			setLoading(false)

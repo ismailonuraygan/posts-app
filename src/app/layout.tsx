@@ -4,8 +4,10 @@ import { Metadata } from 'next'
 
 import Header from '@/components/Header'
 import ThemeProvider from '@/providers/ThemeProvider'
+import ToastProvider from '@/providers/ToastProvider'
 
 import './globals.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 const geistSans = GeistSans
 const geistMono = GeistMono
@@ -28,9 +30,11 @@ export default function RootLayout({
 
 					<div id='main'>
 						<div className='page-content'>
-							{ children }
+							{children}
 						</div>
 					</div>
+
+					<ToastProvider />
 				</ThemeProvider>
 			</body>
 		</html>
