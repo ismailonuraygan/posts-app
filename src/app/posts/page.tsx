@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Pagination, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material'
+import { Pagination, FormControl, InputLabel, Select, MenuItem, Box, IconButton } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
 
 import { useRequest } from '../api'
 import styles from './posts.module.css'
@@ -14,6 +15,7 @@ export default function Posts() {
 	const [page, setPage] = useState(1)
 	const [totalPages, setTotalPages] = useState(1)
 	const [itemsPerPage, setItemsPerPage] = useState(10)
+	const [loading, setLoading] = useState(false)
 
 	const req = useRequest()
 	const router = useRouter()
@@ -25,10 +27,26 @@ export default function Posts() {
 			const data = await req.get(`/posts?limit=${itemsPerPage}&skip=${skip}`)
 
 			setPosts(data.data.posts)
-			
+
 			setTotalPages(Math.ceil(data.data.total / itemsPerPage))
 		} catch (error) {
 			console.error('Error fetching posts:', error)
+		}
+	}
+
+	const handleDelete = async (e: React.MouseEvent, postId: number) => {
+		e.preventDefault()
+
+		setLoading(true)
+
+		try {
+			await req.delete(`/posts/${postId}`)
+
+			await fetchPosts()
+		} catch (error) {
+			console.error('Error deleting post:', error)
+		} finally {
+			setLoading(false)
 		}
 	}
 
@@ -70,41 +88,54 @@ export default function Posts() {
 
 			<div className='container'>
 				<ul className={styles.postsList}>
-					{
-						posts.map((post) => (
-							<Link href={`/posts/${post.id}`} key={post.id} prefetch>
-								<li key={post.id}>
-									{post.title}
-								</li>
-							</Link>
-					))
-					}
-				</ul>
-			</div>
+					{posts.map((post) => (
+						<Link href={`/posts/${post.id}`} key={post.id} prefetch>
+							<li>
+								<span>{post.title}</span>
 
-			<Pagination
-				count={totalPages}
-				page={page}
-				onChange={(event, value) => setPage(value)}
-				color="primary"
-				sx={{
-					marginTop: 2,
-					display: 'flex',
-					justifyContent: 'center',
-					'& .MuiPaginationItem-root': {
-						'&:hover': {
-							backgroundColor: 'rgba(0, 112, 243, 0.1)',
+								<IconButton
+									onClick={(e) => handleDelete(e, post.id)}
+									disabled={loading}
+									size="small"
+									sx={{
+										color: 'var(--foreground)',
+										'&:hover': {
+											color: '#ef4444',
+											backgroundColor: 'rgba(239, 68, 68, 0.1)'
+										}
+									}}
+								>
+									<DeleteIcon fontSize="small" />
+								</IconButton>
+							</li>
+						</Link>
+					))}
+				</ul>
+
+				<Pagination
+					count={totalPages}
+					page={page}
+					onChange={(event, value) => setPage(value)}
+					color="primary"
+					sx={{
+						marginTop: 2,
+						display: 'flex',
+						justifyContent: 'center',
+						'& .MuiPaginationItem-root': {
+							'&:hover': {
+								backgroundColor: 'rgba(0, 112, 243, 0.1)',
+							},
 						},
-					},
-					'& .Mui-selected': {
-						backgroundColor: '#0070f3 !important',
-						color: '#fff !important',
-						'&:hover': {
-							backgroundColor: '#0060df !important',
+						'& .Mui-selected': {
+							backgroundColor: '#0070f3 !important',
+							color: '#fff !important',
+							'&:hover': {
+								backgroundColor: '#0060df !important',
+							},
 						},
-					},
-				}}
-			/>
+					}}
+				/>
+			</div>
 		</div>
 	)
 }
