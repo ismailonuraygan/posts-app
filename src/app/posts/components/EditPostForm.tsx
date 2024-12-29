@@ -8,16 +8,18 @@ import { useRequest } from '@/app/api'
 import TextField from '@/components/TextField'
 import Button from '@/components/Button'
 import { IPost } from '@/types/post'
+import { useRouter } from 'next/navigation'
 
 interface EditPostFormProps {
 	post: IPost
 	onCancel: () => void
 	onSave: (updatedPost: IPost) => void
-	onUpdate: () => Promise<void>
 }
 
-export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditPostFormProps) {
+export default function EditPostForm({ post, onCancel, onSave }: EditPostFormProps) {
 	const req = useRequest()
+	const router = useRouter()
+
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 	const [formData, setFormData] = useState({
@@ -39,9 +41,9 @@ export default function EditPostForm({ post, onCancel, onSave, onUpdate }: EditP
 
 			onSave(data)
 
-			await onUpdate()
-
 			toast.success('Post updated successfully!')
+
+			router.push(`/posts/${post.id}`)
 		} catch (error) {
 			console.error('Error updating post:', error)
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Box, Avatar, Typography, Divider, IconButton } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import { useRequest } from '@/app/api'
@@ -11,22 +11,26 @@ import PostSkeleton from '../components/PostSkeleton'
 import CommentsSkeleton from './components/Comments/CommentsSkeleton'
 import NotFound from './components/NotFound'
 import Comments from './components/Comments/Comments'
-import EditPostForm from '../components/EditPostForm'
 
 export default function Post() {
 	const req = useRequest()
+	const router = useRouter()
 
 	const [post, setPost] = useState<IPost | null>(null)
 	const [user, setUser] = useState<IUser | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
-	const [isEditing, setIsEditing] = useState(false)
 
 	const { id } = useParams()
+
+	const handleEditClick = () => {
+		router.push(`/posts/${id}/edit`)
+	}
 
 	const fetchUser = async (userId: number) => {
 		try {
 			const data = await req.get(`/users/${userId}`)
+
 			setUser(data.data)
 		} catch (error) {
 			console.error('Error fetching user:', error)
@@ -61,11 +65,6 @@ export default function Post() {
 		fetchPost()
 	}, [id])
 
-	const handleSave = (updatedPost: IPost) => {
-		setPost(updatedPost)
-		setIsEditing(false)
-	}
-
 	if (loading) {
 		return (
 			<div className='main'>
@@ -94,79 +93,69 @@ export default function Post() {
 		<div className='main'>
 			<div className='container'>
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-					{isEditing ? (
-						<EditPostForm
-							post={post}
-							onCancel={() => setIsEditing(false)}
-							onSave={handleSave}
-							onUpdate={fetchPost}
-						/>
-					) : (
-						<>
-							<Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
-								<Typography variant="h4" component="h1" sx={{ color: 'var(--foreground)' }}>
-									{post.title}
-								</Typography>
+					<Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+						<Typography variant="h4" component="h1" sx={{ color: 'var(--foreground)' }}>
+							{post.title}
+						</Typography>
 
-								<IconButton
-									onClick={() => setIsEditing(true)}
-									sx={{
-										color: 'var(--secondary-text)',
-										'&:hover': {
-											color: 'var(--foreground)',
-											bgcolor: 'transparent'
-										}
-									}}
-								>
-									<EditIcon />
-								</IconButton>
-							</Box>
-
-							{user && (
-								<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-									<Avatar
-										src={user.image}
-										alt={`${user.firstName} ${user.lastName}`}
-										sx={{ width: 40, height: 40 }}
-									/>
-									<Box sx={{ display: 'flex', flexDirection: 'column' }}>
-										<Typography sx={{ color: 'var(--foreground)' }}>
-											{user.firstName} {user.lastName}
-										</Typography>
-
-										<Typography variant="body2" sx={{ color: 'var(--secondary-text)' }}>
-											@{user.username}
-										</Typography>
-									</Box>
-								</Box>
-							)}
-
-							<Typography sx={{ color: 'var(--foreground)', lineHeight: 1.7 }}>
-								{post.body}
-							</Typography>
-
-							<Box sx={{
-								display: 'flex',
-								gap: 2,
+						<IconButton
+							onClick={handleEditClick}
+							sx={{
 								color: 'var(--secondary-text)',
-								borderTop: '1px solid var(--border-color)',
-								pt: 2,
-								mt: 2
-							}}>
-								<Typography variant="body2">
-									{post.reactions.likes} likes
+								'&:hover': {
+									color: 'var(--foreground)',
+									bgcolor: 'transparent'
+								}
+							}}
+						>
+							<EditIcon />
+						</IconButton>
+					</Box>
+
+					{user && (
+						<Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+							<Avatar
+								src={user.image}
+								alt={`${user.firstName} ${user.lastName}`}
+								sx={{ width: 40, height: 40 }}
+							/>
+
+							<Box sx={{ display: 'flex', flexDirection: 'column' }}>
+								<Typography sx={{ color: 'var(--foreground)' }}>
+									{user.firstName} {user.lastName}
 								</Typography>
 
-								<Typography variant="body2">
-									{post.reactions.dislikes} dislikes
-								</Typography>
-
-								<Typography variant="body2">
-									{post.views} views
+								<Typography variant="body2" sx={{ color: 'var(--secondary-text)' }}>
+									@{user.username}
 								</Typography>
 							</Box>
-						</>
+						</Box>
 					)}
+
+					<Typography sx={{ color: 'var(--foreground)', lineHeight: 1.7 }}>
+						{post.body}
+					</Typography>
+
+					<Box sx={{
+						display: 'flex',
+						gap: 2,
+						color: 'var(--secondary-text)',
+						borderTop: '1px solid var(--border-color)',
+						pt: 2,
+						mt: 2
+					}}>
+						<Typography variant="body2">
+							{post.reactions.likes} likes
+						</Typography>
+
+						<Typography variant="body2">
+							{post.reactions.dislikes} dislikes
+						</Typography>
+
+						<Typography variant="body2">
+							{post.views} views
+						</Typography>
+					</Box>
 
 					<Divider sx={{ borderColor: 'var(--border-color)' }} />
 
