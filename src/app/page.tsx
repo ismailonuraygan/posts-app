@@ -37,6 +37,7 @@ export default function Home() {
 									textTransform: 'none',
 									fontWeight: 500,
 									padding: '12px 24px',
+									width: '100%',
 								}}
 							>
 								Get Started
@@ -56,6 +57,7 @@ export default function Home() {
 									textTransform: 'none',
 									fontWeight: 500,
 									padding: '12px 24px',
+									width: '100%',
 								}}
 							>
 								Browse Posts

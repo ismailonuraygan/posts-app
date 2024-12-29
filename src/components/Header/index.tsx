@@ -78,6 +78,8 @@ export default function Header() {
 			<div className={styles.actions}>
 				<IconButton
 					onClick={toggleTheme}
+					aria-label="Toggle dark mode"
+					title="Toggle dark mode"
 					sx={
 						{
 							color: 'var(--text-color)',
