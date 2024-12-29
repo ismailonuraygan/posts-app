@@ -6,6 +6,7 @@ import { useRequest } from '@/app/api'
 import { IComment } from '@/types/comment'
 import CommentsSkeleton from './CommentsSkeleton'
 import AddComment from './AddComment'
+import { useAuth } from '@/hooks/useAuth'
 
 interface CommentsProps {
 	postId: number
@@ -16,6 +17,8 @@ export default function Comments({ postId }: CommentsProps) {
 	const [comments, setComments] = useState<IComment[]>([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
+
+	const { isAuthenticated } = useAuth()
 
 	const handleCommentAdded = (newComment: IComment) => {
 		setComments([...comments, newComment])
@@ -146,7 +149,7 @@ export default function Comments({ postId }: CommentsProps) {
 				</Box>
 			))}
 
-			<AddComment postId={postId} onCommentAdded={handleCommentAdded} />
+			{isAuthenticated &&<AddComment postId={postId} onCommentAdded={handleCommentAdded} />}
 		</Box>
 	)
 }
