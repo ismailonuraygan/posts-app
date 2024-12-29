@@ -5,6 +5,7 @@ import { Metadata } from 'next'
 import Header from '@/components/Header'
 import ThemeProvider from '@/providers/ThemeProvider'
 import ToastProvider from '@/providers/ToastProvider'
+import { Analytics } from "@vercel/analytics/react"
 
 import './globals.css'
 import 'react-toastify/dist/ReactToastify.css'
@@ -24,6 +25,8 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
+			<Analytics/>
+
 			<body className={`${geistSans.variable} ${geistMono.variable}`}>
 				<ThemeProvider>
 					<Header />
