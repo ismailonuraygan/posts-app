@@ -14,13 +14,28 @@ export default function Login() {
 	const [formData, setFormData] = useState({ username: '', password: '' })
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
+	const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 	const router = useRouter()
 	const req = useRequest()
 
+	useEffect(() => {
+		const accessToken = localStorage.getItem('accessToken')
+		if (accessToken) {
+			setIsLoggedIn(true)
+		}
+	}, [])
 
 	const handleLogout = () => {
-		
+		localStorage.removeItem('accessToken')
+		localStorage.removeItem('refreshToken')
+
+		document.cookie = 'accessToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+		document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+
+		setIsLoggedIn(false)
+
+		router.refresh()
 	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +45,38 @@ export default function Login() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 
+		setError('')
+
+		setLoading(true)
+
+		try {
+			const data = await req.post('/auth/login', {
+				username: formData.username,
+				password: formData.password,
+				expiresInMins: 30
+			})
+
+			if (data.data.accessToken) {
+				localStorage.setItem('accessToken', data.data.accessToken)
+				localStorage.setItem('refreshToken', data.data.refreshToken)
+
+				document.cookie = `accessToken=${data.data.accessToken}; path=/; max-age=${30 * 60}; SameSite=Lax`
+				document.cookie = `refreshToken=${data.data.refreshToken}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`
+
+				router.push('/posts')
+			}
+		} catch (error) {
+			console.error('Error logging in:', error)
+			setError('Invalid username or password')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	if (isLoggedIn) {
+		return (
+			<AlreadyLoggedIn handleLogout={handleLogout} />
+		)
 	}
 
 	return (
@@ -48,7 +95,6 @@ export default function Login() {
 				<Typography
 					component="h1"
 					variant="h5"
-
 				>
 					Sign in
 				</Typography>
