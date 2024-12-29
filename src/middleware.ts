@@ -3,34 +3,35 @@ import type { NextRequest } from 'next/server'
 
 // List of protected routes
 const protectedRoutes = [
-				'/posts/create',
-				'/posts/:id/edit',
-				'/posts/:id/comments/create'
+	'/posts/create',
+	'/posts/:id/edit',
+	'/posts/:id/comments/create'
 ]
 
 async function refreshAccessToken(refreshToken: string) {
-				try {
-								const response = await fetch('https://dummyjson.com/auth/refresh', {
-												method: 'POST',
-												headers: {
-																'Content-Type': 'application/json',
-																'Authorization': `Bearer ${refreshToken}`
-												},
-												body: JSON.stringify({
-														expiresInMins: 30,
-														refreshToken
-												})
-								})
+	try {
+		const response = await fetch('https://dummyjson.com/auth/refresh', {
+			method: 'POST',
+			headers: {
+							'Content-Type': 'application/json',
+							'Authorization': `Bearer ${refreshToken}`
+			},
+			body: JSON.stringify({
+					expiresInMins: 30,
+					refreshToken
+			})
+		})
 
-								if (!response.ok) throw new Error('Failed to refresh token')
+		if (!response.ok) throw new Error('Failed to refresh token')
 
-								const data = await response.json()
+		const data = await response.json()
 
-								return data.accessToken
-				} catch (error) {
-								console.error('Error refreshing token:', error)
-								return null
-				}
+		return data.accessToken
+	} catch (error) {
+		console.error('Error refreshing token:', error)
+
+		return null
+	}
 }
 
 export async function middleware(request: NextRequest) {
@@ -52,12 +53,13 @@ export async function middleware(request: NextRequest) {
 		if (!accessToken && !refreshToken) {
 			// No tokens available, redirect to login
 			const loginUrl = new URL('/login', request.url)
+
 			loginUrl.searchParams.set('callbackUrl', pathname)
+
 			return NextResponse.redirect(loginUrl)
 		}
 
 		if (!accessToken && refreshToken) {
-			// Try to refresh the access token
 			const newAccessToken = await refreshAccessToken(refreshToken)
 
 			if (newAccessToken) {
@@ -88,7 +90,6 @@ export async function middleware(request: NextRequest) {
 	return NextResponse.next()
 }
 
-// Configure the paths that middleware will run on
 export const config = {
 	matcher: [
 		'/posts/create',
