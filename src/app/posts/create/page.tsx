@@ -9,10 +9,11 @@ export default function CreatePost() {
 			<div className='container'>
 				<Box sx={{ mt: 4 }}>
 					<Typography
-						variant="h4"
+						variant="h1"
 						sx={{
 							color: 'var(--foreground)',
-							mb: 4
+							mb: 4,
+							fontSize: '2.125rem'
 						}}
 					>
 						Create New Post
