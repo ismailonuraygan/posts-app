@@ -76,19 +76,6 @@ export default function Header() {
 			</Link>
 
 			<div className={styles.actions}>
-				<IconButton
-					onClick={toggleTheme}
-					aria-label="Toggle dark mode"
-					title="Toggle dark mode"
-					sx={
-						{
-							color: 'var(--text-color)',
-						}
-					}
-				>
-					{ mode === 'dark' ? <LightMode /> : <DarkMode /> }
-				</IconButton>
-
 				{
 					isPostsPage && isLoggedIn &&
 						<Link href="/posts/create">
@@ -118,6 +105,19 @@ export default function Header() {
 							</Button>
 						</Link>
 				}
+
+				<IconButton
+					onClick={toggleTheme}
+					aria-label="Toggle dark mode"
+					title="Toggle dark mode"
+					sx={
+						{
+							color: 'var(--text-color)',
+						}
+					}
+				>
+					{ mode === 'dark' ? <LightMode /> : <DarkMode /> }
+				</IconButton>
 			</div>
 		</header>
 	)
