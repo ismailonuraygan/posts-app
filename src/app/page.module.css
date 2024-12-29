@@ -37,6 +37,7 @@
   display: flex;
   gap: 1rem;
   justify-content: center;
+  align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -71,10 +72,10 @@
     flex-direction: column;
   }
 
-  .ctas a {
+  /* .ctas a {
     font-size: 14px;
     height: 40px;
-  }
+  } */
 
   .footer {
     flex-wrap: wrap;
