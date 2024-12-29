@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Alert, Box, Container, Typography } from '@mui/material'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { toast } from 'react-toastify'
 
 import { useRequest } from '@/app/api'
@@ -17,7 +17,10 @@ export default function Login() {
 	const [isLoggedIn, setIsLoggedIn] = useState(false)
 
 	const router = useRouter()
+	const searchParams = useSearchParams()
 	const req = useRequest()
+
+	const callbackUrl = searchParams.get('callbackUrl') || '/posts'
 
 	useEffect(() => {
 		const accessToken = localStorage.getItem('accessToken')
@@ -46,7 +49,6 @@ export default function Login() {
 		e.preventDefault()
 
 		setError('')
-
 		setLoading(true)
 
 		try {
@@ -63,7 +65,7 @@ export default function Login() {
 				document.cookie = `accessToken=${data.data.accessToken}; path=/; max-age=${30 * 60}; SameSite=Lax`
 				document.cookie = `refreshToken=${data.data.refreshToken}; path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax`
 
-				router.push('/posts')
+				router.push(callbackUrl)
 			}
 		} catch (error) {
 			console.error('Error logging in:', error)
